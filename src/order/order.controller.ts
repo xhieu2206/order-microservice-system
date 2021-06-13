@@ -6,16 +6,20 @@ import {
   Param,
   Patch,
   Delete,
+  Inject,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { UpdateResult } from 'typeorm';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('orders')
 export class OrderController {
-  constructor(private orderService: OrderService) {}
+  constructor(
+    private orderService: OrderService,
+    @Inject('ORDER_SERVICE') private readonly client: ClientProxy,
+  ) {}
 
   @Get()
   all(): Promise<Order[]> {
@@ -23,8 +27,10 @@ export class OrderController {
   }
 
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
-    return this.orderService.create(createOrderDto);
+  async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+    const newOrder = await this.orderService.create(createOrderDto);
+    this.client.emit('order_created', newOrder);
+    return newOrder;
   }
 
   @Get(':id')

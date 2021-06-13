@@ -6,7 +6,7 @@ POST http://localhost:3001/api/orders
 Content-Type: application/json
 
 {
-  "productName": "product name 2",
+  "productName": "product name 10",
   "image": "https://moonstore.org/wp/wp-content/uploads/2017/06/wood-product-paceholder.jpg",
   "quantity": 1,
   "deliveryAddress": "Chua Lang, Ha Noi, Viet Nam",
