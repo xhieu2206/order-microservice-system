@@ -26,5 +26,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   ],
   controllers: [OrderController],
   providers: [OrderService],
+  exports: [OrderService],
 })
 export class OrderModule {}

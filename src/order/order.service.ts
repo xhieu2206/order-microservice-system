@@ -39,4 +39,13 @@ export class OrderService {
     const removeOrder = await this.orderRepository.findOne(id);
     return this.orderRepository.remove(removeOrder);
   }
+
+  async updateConfirmedOrderStatus() {
+    await this.orderRepository
+      .createQueryBuilder()
+      .update(Order)
+      .set({ status: 'delivered' })
+      .where('status = :status', { status: 'confirmed' })
+      .execute();
+  }
 }
