@@ -3,6 +3,7 @@ import {
   IsEmail,
   IsIn,
   IsMobilePhone,
+  IsOptional,
   Min,
   MinLength,
 } from 'class-validator';
@@ -29,4 +30,7 @@ export class UpdateOrderDto {
 
   @IsIn(['created', 'confirmed', 'cancelled', 'delivered'])
   status: string;
+
+  @IsOptional()
+  pin?: number;
 }

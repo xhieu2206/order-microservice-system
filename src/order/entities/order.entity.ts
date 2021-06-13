@@ -35,4 +35,7 @@ export class Order {
 
   @Column({ name: 'status', default: 'created' })
   status: string;
+
+  @Column({ name: 'pin_code', nullable: true })
+  pin: number;
 }
