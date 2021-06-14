@@ -47,3 +47,23 @@ Content-Type: application/json
 ### PROTECTED ROUTE
 http://localhost:3001/api/protected
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJzdWIiOjEsImlhdCI6MTYyMzY0MzQ3NCwiZXhwIjoxNjIzNjQzNTM0fQ.RgV4_gZYnrBi1uxzcX_PrvS2IWN_xqqhrX6jXxcSvo
+
+################################ CATEGORY ################################
+### CREATE A NEW CATEGORY
+POST http://localhost:3001/api/categories
+Content-Type: application/json
+
+{
+  "name": "Apple",
+  "brandImage": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple-logo.png"
+}
+
+################################ PRODUCT ################################
+POST http://localhost:3001/api/categories/1/products
+Content-Type: application/json
+
+{
+"name": "Xiaomi Note 11",
+  "image": "https://cdn.tgdd.vn/Products/Images/42/235971/xiaomi-redmi-note-10-5g-xanh-bong-dem-1-600x600.jpg",
+  "description": "Description if Xiaomi Note 10"
+}
