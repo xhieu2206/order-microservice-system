@@ -33,3 +33,17 @@ Content-Type: application/json
   "email": "xhieu94@gmail.com",
   "status": "confirmed"
 }
+
+################################ AUTHENICATION ################################
+### LOGIN
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### PROTECTED ROUTE
+http://localhost:3001/api/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJzdWIiOjEsImlhdCI6MTYyMzY0MzQ3NCwiZXhwIjoxNjIzNjQzNTM0fQ.RgV4_gZYnrBi1uxzcX_PrvS2IWN_xqqhrX6jXxcSvo
