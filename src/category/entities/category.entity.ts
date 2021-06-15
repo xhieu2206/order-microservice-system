@@ -12,6 +12,6 @@ export class Category {
   @Column({ name: 'brand-name' })
   brandImage: string;
 
-  @OneToMany(() => Product, (product) => product.category)
+  @OneToMany(() => Product, (product) => product.category, { cascade: false })
   products: Product[];
 }

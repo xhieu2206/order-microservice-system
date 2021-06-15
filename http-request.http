@@ -58,12 +58,28 @@ Content-Type: application/json
   "brandImage": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple-logo.png"
 }
 
+### GET ALL CATEGORIES
+GET http://localhost:3001/api/categories
+
+### GET CATEGORY AND ITS ITEMS
+GET http://localhost:3001/api/categories/3
+
+### DELETE A CATEGORY BY ID
+DELETE http://localhost:3001/api/categories/3
+
 ################################ PRODUCT ################################
-POST http://localhost:3001/api/categories/1/products
+### CREATE A NEW PRODUCT
+POST http://localhost:3001/api/categories/2/products
 Content-Type: application/json
 
 {
-"name": "Xiaomi Note 11",
-  "image": "https://cdn.tgdd.vn/Products/Images/42/235971/xiaomi-redmi-note-10-5g-xanh-bong-dem-1-600x600.jpg",
-  "description": "Description if Xiaomi Note 10"
+  "name": "iPhone 12",
+  "image": "https://cdn.tgdd.vn/Products/Images/42/228736/iphone-12-violet-1-600x600.jpg",
+  "description": "Description of iPhone 12"
 }
+
+### GET ALL PRODUCTS
+http://localhost:3001/api/products
+
+### GET PRODUCT BY ID
+http://localhost:3001/api/products/5

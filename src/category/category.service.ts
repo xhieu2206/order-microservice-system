@@ -12,7 +12,9 @@ export class CategoryService {
   ) {}
 
   async all(): Promise<Category[]> {
-    return this.categoryRepository.find();
+    return this.categoryRepository.find({
+      relations: ['products'],
+    });
   }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
@@ -23,6 +25,13 @@ export class CategoryService {
   }
 
   async get(id: number): Promise<Category> {
-    return this.categoryRepository.findOne(id);
+    return this.categoryRepository.findOne(id, {
+      relations: ['products'],
+    });
+  }
+
+  async delete(id: number): Promise<Category> {
+    const deleteCategory = await this.categoryRepository.findOne(id);
+    return this.categoryRepository.remove(deleteCategory);
   }
 }
