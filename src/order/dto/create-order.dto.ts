@@ -18,7 +18,6 @@ export class CreateOrderDto {
   @MinLength(5)
   deliveryAddress: string;
 
-  @IsAlphanumeric()
   @MinLength(5)
   customerName: string;
 
