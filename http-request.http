@@ -1,5 +1,6 @@
 ### GET ALL ORDERS
 http://localhost:3001/api/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJzdWIiOjEsImlhdCI6MTYyMzgxMDEwMSwiZXhwIjoxNjIzODEwMTYxfQ.XQTjHolIZ48PGnm6bm77wnTPUr9BAZx9Z5hDZBqoQ44
 
 ### CREATE AN ORDER
 POST http://localhost:3001/api/orders
