@@ -1,5 +1,6 @@
 ### GET ALL ORDERS
 http://localhost:3001/api/orders
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJzdWIiOjEsImlhdCI6MTYyMzgxMDEwMSwiZXhwIjoxNjIzODEwMTYxfQ.XQTjHolIZ48PGnm6bm77wnTPUr9BAZx9Z5hDZBqoQ44
 
 ### CREATE AN ORDER
 POST http://localhost:3001/api/orders
@@ -33,3 +34,53 @@ Content-Type: application/json
   "email": "xhieu94@gmail.com",
   "status": "confirmed"
 }
+
+################################ AUTHENICATION ################################
+### LOGIN
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password"
+}
+
+### PROTECTED ROUTE
+http://localhost:3001/api/protected
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQWRtaW4iLCJzdWIiOjEsImlhdCI6MTYyMzY0MzQ3NCwiZXhwIjoxNjIzNjQzNTM0fQ.RgV4_gZYnrBi1uxzcX_PrvS2IWN_xqqhrX6jXxcSvo
+
+################################ CATEGORY ################################
+### CREATE A NEW CATEGORY
+POST http://localhost:3001/api/categories
+Content-Type: application/json
+
+{
+  "name": "Apple",
+  "brandImage": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple-logo.png"
+}
+
+### GET ALL CATEGORIES
+GET http://localhost:3001/api/categories
+
+### GET CATEGORY AND ITS ITEMS
+GET http://localhost:3001/api/categories/3
+
+### DELETE A CATEGORY BY ID
+DELETE http://localhost:3001/api/categories/3
+
+################################ PRODUCT ################################
+### CREATE A NEW PRODUCT
+POST http://localhost:3001/api/categories/2/products
+Content-Type: application/json
+
+{
+  "name": "iPhone 12",
+  "image": "https://cdn.tgdd.vn/Products/Images/42/228736/iphone-12-violet-1-600x600.jpg",
+  "description": "Description of iPhone 12"
+}
+
+### GET ALL PRODUCTS
+http://localhost:3001/api/products
+
+### GET PRODUCT BY ID
+http://localhost:3001/api/products/5

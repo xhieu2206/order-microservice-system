@@ -1,31 +1,41 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Order {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column({ name: 'product_name' })
   productName: string;
 
+  @ApiProperty()
   @Column({ name: 'image' })
   image: string;
 
+  @ApiProperty()
   @Column({ name: 'quantity' })
   quantity: number;
 
+  @ApiProperty()
   @Column({ name: 'delivery_address' })
   deliveryAddress: string;
 
+  @ApiProperty()
   @Column({ name: 'customer_name' })
   customerName: string;
 
+  @ApiProperty()
   @Column({ name: 'phone_number' })
   phone: string;
 
+  @ApiProperty()
   @Column({ name: 'email_address' })
   email: string;
 
+  @ApiProperty()
   @Column({
     name: 'created_at',
     type: 'datetime',
@@ -33,9 +43,11 @@ export class Order {
   })
   createdAt: Date;
 
+  @ApiProperty()
   @Column({ name: 'status', default: 'created' })
   status: string;
 
+  @ApiProperty()
   @Column({ name: 'pin_code', nullable: true })
   pin: number;
 }
