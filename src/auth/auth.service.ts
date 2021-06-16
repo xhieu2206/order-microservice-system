@@ -13,8 +13,7 @@ export class AuthService {
     const user = await this.usersService.findOne(username);
 
     if (user && user.password === password) {
-      const { password, username, ...rest } = user;
-      return rest;
+      return user;
     }
 
     return null;
@@ -25,9 +24,12 @@ export class AuthService {
       name: user.name,
       sub: user.id,
     };
+    const returnUser = { ...user };
+    delete returnUser.password;
 
     return {
       access_token: this.jwtService.sign(payload),
+      user: returnUser,
     };
   }
 }

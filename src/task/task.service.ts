@@ -6,7 +6,7 @@ import { OrderService } from '../order/order.service';
 export class TaskService {
   constructor(private readonly orderService: OrderService) {}
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     await this.orderService.updateConfirmedOrderStatus();
   }

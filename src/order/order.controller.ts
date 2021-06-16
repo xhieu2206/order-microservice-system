@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Delete,
-  Inject,
+  Inject, Put,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './entities/order.entity';
@@ -38,7 +38,7 @@ export class OrderController {
     return this.orderService.get(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: number,
     @Body() updateOrderDto: UpdateOrderDto,
