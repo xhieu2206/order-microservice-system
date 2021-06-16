@@ -17,8 +17,7 @@ export class OrderService {
   }
 
   async get(id: number): Promise<Order> {
-    const order = await this.orderRepository.findOne(id);
-    return order;
+    return await this.orderRepository.findOne(id);
   }
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {

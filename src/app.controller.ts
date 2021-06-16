@@ -1,8 +1,9 @@
-import { Controller, Get, Post, UseGuards, Request } from '@nestjs/common';
+import {Controller, Get, Post, UseGuards, Request, Body} from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import {ApiResponse, ApiTags} from '@nestjs/swagger';
+import {Authentication} from './users/entities/authentication';
 
 @Controller()
 export class AppController {
@@ -11,20 +12,16 @@ export class AppController {
     private readonly authService: AuthService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
+  @ApiTags('Authentication')
+  @ApiResponse({
+    status: 201,
+    description: 'Login successfully',
+  })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() req): any {
+  login(@Request() req, @Body() authentication: Authentication): any {
+    console.log(req.user);
+    console.log(authentication);
     return this.authService.login(req.user);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('protected')
-  getProtectedInfo(): string {
-    return 'Protected Information';
   }
 }
