@@ -23,7 +23,7 @@ export class CreateOrderDto {
   @ApiProperty({
     required: true,
     description: 'Delivery Address, min 5 characters',
-    minLength: 5
+    minLength: 5,
   })
   @MinLength(5)
   deliveryAddress: string;

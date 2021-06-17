@@ -1,8 +1,23 @@
-import {BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post} from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { Category } from './entities/category.entity';
-import {ApiBadRequestResponse, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags} from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Category')
 @Controller('categories')
@@ -39,7 +54,7 @@ export class CategoryController {
   async all(): Promise<Category[]> {
     const categories = await this.categoryService.all();
     if (categories.length === 0) {
-      throw new NotFoundException()
+      throw new NotFoundException();
     }
     return categories;
   }

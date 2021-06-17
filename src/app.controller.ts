@@ -1,9 +1,16 @@
-import {Controller, Get, Post, UseGuards, Request, Body} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Request,
+  Body,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
-import {ApiResponse, ApiTags} from '@nestjs/swagger';
-import {Authentication} from './users/entities/authentication';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Authentication } from './users/entities/authentication';
 
 @Controller()
 export class AppController {
@@ -20,7 +27,6 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req, @Body() authentication: Authentication): any {
-    console.log(req.user);
     console.log(authentication);
     return this.authService.login(req.user);
   }

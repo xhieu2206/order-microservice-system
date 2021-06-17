@@ -7,7 +7,9 @@ import {
   Delete,
   Inject,
   Put,
-  UseGuards, BadRequestException, NotFoundException,
+  UseGuards,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from './entities/order.entity';
@@ -21,7 +23,7 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
 @ApiTags('Orders')
@@ -45,10 +47,17 @@ export class OrderController {
   @ApiUnauthorizedResponse({
     description: 'Missing or wrong access token',
   })
+  @ApiNotFoundResponse({
+    description: 'If no orders were found',
+  })
   @UseGuards(JwtAuthGuard)
   @Get()
-  all(): Promise<Order[]> {
-    return this.orderService.all();
+  async all(): Promise<Order[]> {
+    const orders = await this.orderService.all();
+    if (orders.length === 0) {
+      throw new NotFoundException();
+    }
+    return orders;
   }
 
   @ApiOkResponse({
