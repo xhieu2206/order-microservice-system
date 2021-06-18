@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import { OrderStatusEnum } from '../../enums/enums';
 
 @Entity()
 export class Order {
@@ -44,7 +45,11 @@ export class Order {
   createdAt: Date;
 
   @ApiProperty()
-  @Column({ name: 'status', default: 'created' })
+  @Column({
+    name: 'status',
+    default: OrderStatusEnum.CREATED,
+    enum: OrderStatusEnum,
+  })
   status: string;
 
   @ApiProperty()

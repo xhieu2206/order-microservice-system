@@ -1,5 +1,5 @@
 import {
-  IsEmail,
+  IsEmail, IsEnum,
   IsIn,
   IsMobilePhone,
   IsOptional,
@@ -7,11 +7,13 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import {OrderStatusEnum} from '../../enums/enums';
 
 export class UpdateOrderDto {
   @ApiProperty({
     required: true,
     description: 'Not required, but pre-filled in the FE with Product item',
+    minLength: 3
   })
   @MinLength(3)
   productName: string;
@@ -49,8 +51,11 @@ export class UpdateOrderDto {
   @ApiProperty({
     required: true,
     description: `Accept one one of there value: "created", "confirmed", "cancelled", "delivered"`,
+    type: OrderStatusEnum,
+    enumName: 'OrderStatusEnum',
+    enum: OrderStatusEnum,
   })
-  @IsIn(['created', 'confirmed', 'cancelled', 'delivered'])
+  @IsEnum(OrderStatusEnum)
   status: string;
 
   @IsOptional()

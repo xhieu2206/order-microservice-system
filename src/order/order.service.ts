@@ -4,6 +4,7 @@ import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status-dto';
 
 @Injectable()
 export class OrderService {
@@ -30,6 +31,18 @@ export class OrderService {
     updateOrder = {
       ...updateOrder,
       ...updateOrderDto,
+    };
+    return this.orderRepository.save(updateOrder);
+  }
+
+  async updateStatus(
+    id: number,
+    updateOrderStatusDto: UpdateOrderStatusDto,
+  ): Promise<Order> {
+    let updateOrder = await this.orderRepository.findOne(id);
+    updateOrder = {
+      ...updateOrder,
+      ...updateOrderStatusDto,
     };
     return this.orderRepository.save(updateOrder);
   }

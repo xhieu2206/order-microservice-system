@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, MinLength } from 'class-validator';
+import {IsNotEmpty, MinLength} from 'class-validator';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -17,6 +17,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   image: string;
 
+  @ApiProperty({
+    required: true,
+    description: 'Prefilled in the BE by product item',
+  })
   @IsNotEmpty()
   description: string;
 }

@@ -52,11 +52,7 @@ export class CategoryController {
   })
   @Get()
   async all(): Promise<Category[]> {
-    const categories = await this.categoryService.all();
-    if (categories.length === 0) {
-      throw new NotFoundException();
-    }
-    return categories;
+    return this.categoryService.all();
   }
 
   @ApiOkResponse({ type: Category, description: 'API to get category by ID' })

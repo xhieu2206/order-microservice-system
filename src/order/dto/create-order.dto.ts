@@ -1,4 +1,10 @@
-import { IsEmail, IsMobilePhone, Min, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsMobilePhone,
+  IsNotEmpty,
+  Min,
+  MinLength,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrderDto {
@@ -11,9 +17,10 @@ export class CreateOrderDto {
   productName: string;
 
   @ApiProperty({
-    required: false,
+    required: true,
     description: 'Pre-filled in the FE with Product item',
   })
+  @IsNotEmpty()
   image: string;
 
   @ApiProperty({ required: true, minimum: 1 })

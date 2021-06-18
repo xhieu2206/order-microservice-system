@@ -7,6 +7,7 @@ import {
   Delete,
   Inject,
   Put,
+  Patch,
   UseGuards,
   BadRequestException,
   NotFoundException,
@@ -17,14 +18,14 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CommonErrorAuthorizationResponse } from '../decorators/responses';
 import {
   ApiBadRequestResponse,
-  ApiHeader,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { UpdateOrderStatusDto } from './dto/update-order-status-dto';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -40,24 +41,11 @@ export class OrderController {
     description:
       'API to get all the orders in the system, authorization needed',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    example: 'Bearer {token}',
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or wrong access token',
-  })
-  @ApiNotFoundResponse({
-    description: 'If no orders were found',
-  })
+  @CommonErrorAuthorizationResponse()
   @UseGuards(JwtAuthGuard)
   @Get()
-  async all(): Promise<Order[]> {
-    const orders = await this.orderService.all();
-    if (orders.length === 0) {
-      throw new NotFoundException();
-    }
-    return orders;
+  all(): Promise<Order[]> {
+    return this.orderService.all();
   }
 
   @ApiOkResponse({
@@ -65,15 +53,9 @@ export class OrderController {
     description:
       'API to create a Order, return created Order, authorization needed',
   })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or wrong access token',
-  })
+  @CommonErrorAuthorizationResponse()
   @ApiBadRequestResponse({
-    description: 'Data of the order were not correct',
-  })
-  @ApiHeader({
-    name: 'Authorization',
-    example: 'Bearer {token}',
+    description: "Data of the order weren't correct",
   })
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -90,15 +72,9 @@ export class OrderController {
     type: Order,
     description: 'API to get a Order detail, authentication required',
   })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or wrong access token',
-  })
+  @CommonErrorAuthorizationResponse()
   @ApiNotFoundResponse({
     description: "Order with this ID doesn't exited",
-  })
-  @ApiHeader({
-    name: 'Authorization',
-    example: 'Bearer {token}',
   })
   @UseGuards(JwtAuthGuard)
   @Get(':id')
@@ -110,7 +86,13 @@ export class OrderController {
     return order;
   }
 
+  @ApiOkResponse({
+    type: Order,
+    description: 'API to update a Order detail, authentication required',
+  })
+  @CommonErrorAuthorizationResponse()
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: number,
     @Body() updateOrderDto: UpdateOrderDto,
@@ -120,15 +102,21 @@ export class OrderController {
 
   @ApiOkResponse({
     type: Order,
+    description: "API to update a Order's status",
+  })
+  @Patch(':id')
+  async updateStatus(
+    @Param('id') id: number,
+    @Body() updateOrderStatusDto: UpdateOrderStatusDto,
+  ): Promise<Order> {
+    return this.orderService.updateStatus(id, updateOrderStatusDto);
+  }
+
+  @ApiOkResponse({
+    type: Order,
     description: 'API to delete a Order detail by ID, authentication required',
   })
-  @ApiHeader({
-    name: 'Authorization',
-    example: 'Bearer {token}',
-  })
-  @ApiUnauthorizedResponse({
-    description: 'Missing or wrong access token',
-  })
+  @CommonErrorAuthorizationResponse()
   @ApiNotFoundResponse({
     description: "Order with this ID doesn't exited",
   })
