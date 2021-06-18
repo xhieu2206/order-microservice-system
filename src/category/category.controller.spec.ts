@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
 import { randomInt } from 'crypto';
-import exp from 'constants';
 
 describe('CategoryController', () => {
   let controller: CategoryController;

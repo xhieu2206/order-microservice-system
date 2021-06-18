@@ -1,21 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { OrderStatusFieldRequest } from '../../decorators/common-decorator';
 import { OrderStatusEnum } from '../../enums/enums';
-import { IsEnum, IsNumber } from 'class-validator';
 
 export class UpdateOrderStatusDto {
-  @ApiProperty({
-    required: true,
-    description: `Accept one one of there value: "created", "confirmed", "cancelled", "delivered"`,
-    type: OrderStatusEnum,
-    enumName: 'OrderStatusEnum',
-    enum: OrderStatusEnum,
-  })
-  @IsEnum(OrderStatusEnum)
-  status: string;
+  @OrderStatusFieldRequest()
+  status: OrderStatusEnum;
 
   @ApiProperty({
     required: false,
+    type: Number,
+    nullable: true,
   })
-  @IsNumber()
-  pin?: number | null;
+  pin?: number;
 }

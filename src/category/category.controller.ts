@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -18,6 +17,7 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { NotFoundResponse } from '../decorators/common-decorator';
 
 @ApiTags('Category')
 @Controller('categories')
@@ -35,11 +35,7 @@ export class CategoryController {
   async create(
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Category> {
-    const category = await this.categoryService.create(createCategoryDto);
-    if (!category) {
-      throw new BadRequestException();
-    }
-    return category;
+    return this.categoryService.create(createCategoryDto);
   }
 
   @ApiOkResponse({
@@ -47,18 +43,13 @@ export class CategoryController {
     isArray: true,
     description: 'API to list all categories in the system',
   })
-  @ApiNotFoundResponse({
-    description: 'No categories were found',
-  })
   @Get()
   async all(): Promise<Category[]> {
     return this.categoryService.all();
   }
 
   @ApiOkResponse({ type: Category, description: 'API to get category by ID' })
-  @ApiNotFoundResponse({
-    description: "Category with this ID doesn't exited",
-  })
+  @NotFoundResponse()
   @Get(':id')
   async get(@Param('id') id: number): Promise<Category> {
     const category = await this.categoryService.get(id);
@@ -72,15 +63,9 @@ export class CategoryController {
     type: Category,
     description: 'API to delete a category by ID',
   })
-  @ApiNotFoundResponse({
-    description: "Category with this ID doesn't exited",
-  })
+  @NotFoundResponse()
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<Category> {
-    const category = await this.categoryService.delete(id);
-    if (!category) {
-      throw new NotFoundException();
-    }
-    return category;
+  delete(@Param('id') id: number): Promise<Category> {
+    return this.categoryService.delete(id);
   }
 }

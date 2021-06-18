@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderStatusEnum } from '../../enums/enums';
+import {IsEnum} from 'class-validator';
 
 @Entity()
 export class Order {
@@ -50,7 +51,8 @@ export class Order {
     default: OrderStatusEnum.CREATED,
     enum: OrderStatusEnum,
   })
-  status: string;
+  @IsEnum(OrderStatusEnum)
+  status: OrderStatusEnum;
 
   @ApiProperty()
   @Column({ name: 'pin_code', nullable: true })

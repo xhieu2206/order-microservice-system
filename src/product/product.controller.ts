@@ -2,7 +2,13 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './entities/product.entity';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
+import { NotFoundResponse } from '../decorators/common-decorator';
 
 @ApiTags('Product')
 @Controller()
@@ -21,8 +27,9 @@ export class ProductController {
 
   @ApiOkResponse({
     type: Product,
-    description: 'Return all the product by ID',
+    description: 'Return product by ID',
   })
+  @NotFoundResponse()
   @Get('/products/:id')
   get(@Param('id') id: number): Promise<Product> {
     return this.productService.get(id);
@@ -31,6 +38,10 @@ export class ProductController {
   @ApiOkResponse({
     type: Product,
     description: 'Create a new product, must have category ID first',
+  })
+  @NotFoundResponse()
+  @ApiBadRequestResponse({
+    description: "One or many fields weren't corrected",
   })
   @ApiParam({ name: 'categoryId', required: true })
   @Post('/categories/:categoryId/products')
