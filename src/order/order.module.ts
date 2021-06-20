@@ -4,23 +4,26 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { OrderService } from './order.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Order]),
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'ORDER_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [
-            'amqps://pmhdtbdy:ROUFcuWj4GH-jFrxsqtrxf6jgpUlB2ld@snake.rmq2.cloudamqp.com/pmhdtbdy',
-          ],
-          queue: 'payment_queue',
-          queueOptions: {
-            durable: false,
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RMQ_CLOUD')],
+            queue: 'payment_queue',
+            queueOptions: {
+              durable: false,
+            },
           },
-        },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],
