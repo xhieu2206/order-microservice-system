@@ -9,11 +9,11 @@ export class Category {
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
   @ApiProperty()
-  @Column({ name: 'brand-name' })
+  @Column({ name: 'brand-image', nullable: false })
   brandImage: string;
 
   @OneToMany(() => Product, (product) => product.category, { cascade: false })

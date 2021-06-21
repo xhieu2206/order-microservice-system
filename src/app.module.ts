@@ -25,7 +25,7 @@ import { SqliteConnectionOptions } from 'typeorm/driver/sqlite/SqliteConnectionO
         type: 'sqlite',
         database: configService.get<string>('DB_NAME'),
         entities: ['dist/src/**/*.entity.js'],
-        synchronize: false,
+        synchronize: true,
         migrations: ['dist/src/db/migrations/*.js'],
         cli: {
           migrationsDir: 'src/db/migrations',

@@ -9,15 +9,15 @@ export class Product {
   id: number;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false })
   image: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: false })
   description: string;
 
   @ManyToOne(() => Category, (category) => category.products)

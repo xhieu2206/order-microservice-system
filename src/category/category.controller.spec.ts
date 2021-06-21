@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
-import { randomInt } from 'crypto';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
@@ -9,7 +9,7 @@ describe('CategoryController', () => {
   const mockCategoryService = {
     create: jest.fn((dto) => {
       return {
-        id: randomInt(1, 100),
+        id: 1,
         ...dto,
       };
     }),
@@ -99,7 +99,7 @@ describe('CategoryController', () => {
   });
 
   it('should delete the category with ID equal 1 successfully', () => {
-    expect(controller.delete(1)).resolves.toEqual({
+    expect(controller.delete(1)).toEqual({
       id: 1,
       name: 'Testing Brand Name',
       brandImage: 'Testing Brand Image',
