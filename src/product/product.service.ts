@@ -22,7 +22,7 @@ export class ProductService {
     return product;
   }
 
-  async all(): Promise<Product[]> {
+  all(): Promise<Product[]> {
     return this.productRepository.find();
   }
 
