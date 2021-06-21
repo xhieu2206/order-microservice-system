@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderStatusEnum } from '../../enums/enums';
-import {IsEnum} from 'class-validator';
+import { IsEnum } from 'class-validator';
 
 @Entity()
 export class Order {
