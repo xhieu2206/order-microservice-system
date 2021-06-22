@@ -1,6 +1,6 @@
 import {
   IsEmail,
-  IsMobilePhone,
+  IsMobilePhone, IsNotEmpty,
   IsOptional,
   Min,
   MinLength,
@@ -16,10 +16,12 @@ export class UpdateOrderDto {
     minLength: 3,
   })
   @MinLength(3)
+  @IsNotEmpty()
   productName: string;
 
   @ApiProperty({ required: true, minimum: 1 })
   @Min(1)
+  @IsNotEmpty()
   quantity: number;
 
   @ApiProperty({
@@ -28,10 +30,12 @@ export class UpdateOrderDto {
     minLength: 5,
   })
   @MinLength(5)
+  @IsNotEmpty()
   deliveryAddress: string;
 
   @ApiProperty({ required: true, minLength: 5 })
   @MinLength(5)
+  @IsNotEmpty()
   customerName: string;
 
   @ApiProperty({
@@ -39,6 +43,7 @@ export class UpdateOrderDto {
     description: 'Must be a correct mobile phone number',
   })
   @IsMobilePhone()
+  @IsNotEmpty()
   phone: string;
 
   @ApiProperty({
@@ -46,6 +51,7 @@ export class UpdateOrderDto {
     description: 'Must be a correct email address',
   })
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @OrderStatusFieldRequest()

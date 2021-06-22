@@ -19,7 +19,7 @@ export class OrderService {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  async all(): Promise<Order[]> {
+  all(): Promise<Order[]> {
     return this.orderRepository.find();
   }
 
@@ -43,9 +43,6 @@ export class OrderService {
     ) {
       throw new BadRequestException();
     }
-    if (!updateOrder) {
-      throw new NotFoundException();
-    }
     updateOrder = {
       ...updateOrder,
       ...updateOrderDto,
@@ -58,9 +55,6 @@ export class OrderService {
     updateOrderStatusDto: UpdateOrderStatusDto,
   ): Promise<Order> {
     let updateOrder = await this.get(id);
-    if (!updateOrder) {
-      throw new NotFoundException();
-    }
     updateOrder = {
       ...updateOrder,
       ...updateOrderStatusDto,
@@ -70,9 +64,6 @@ export class OrderService {
 
   async delete(id: number): Promise<Order> {
     const removeOrder = await this.get(id);
-    if (!removeOrder) {
-      throw new NotFoundException();
-    }
     return this.orderRepository.remove(removeOrder);
   }
 

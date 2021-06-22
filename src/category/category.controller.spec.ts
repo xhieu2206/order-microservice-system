@@ -1,9 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
+import { NotFoundException } from '@nestjs/common';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
+  let anotherController: CategoryController;
 
   const mockCategoryService = {
     create: jest.fn((dto) => {
@@ -57,10 +59,6 @@ describe('CategoryController', () => {
     controller = module.get<CategoryController>(CategoryController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
-
   it('should create a category', () => {
     expect(
       controller.create({
@@ -95,6 +93,33 @@ describe('CategoryController', () => {
       name: 'Testing Brand Name',
       brandImage: 'Testing Brand Image',
     });
+  });
+
+  it(`should return a NotFoundException if trying to get the order with non-existed ID, example category with ID equal 5`, async () => {
+    const anotherMockCategoryService = {
+      get: jest.fn(() => {
+        return null;
+      }),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [CategoryController],
+      providers: [CategoryService],
+    })
+      .overrideProvider(CategoryService)
+      .useValue(anotherMockCategoryService)
+      .compile();
+
+    anotherController = module.get<CategoryController>(CategoryController);
+
+    try {
+      await anotherController.get(1);
+    } catch (err) {
+      expect(err.response).toEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    }
   });
 
   it('should delete the category with ID equal 1 successfully', () => {

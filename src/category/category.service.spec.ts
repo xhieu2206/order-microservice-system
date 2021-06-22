@@ -6,6 +6,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 
 describe('CategoryService', () => {
   let service: CategoryService;
+  let anotherService: CategoryService;
   const mockCategoryRepository = {
     create: jest.fn().mockImplementation((dto: CreateCategoryDto) => dto),
     save: jest.fn().mockImplementation((category) =>
@@ -108,5 +109,33 @@ describe('CategoryService', () => {
       brandImage: 'Test Category 1 Image',
       products: [],
     });
+  });
+
+  it(`should not allow to remove the category with ID equal 5, because category with this ID doesn't existed and return the NotFoundException instead`, async () => {
+    const anotherMockCategoryRepository = {
+      findOne: jest
+        .fn()
+        .mockImplementation((id: number) => Promise.resolve(null)),
+    };
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        CategoryService,
+        {
+          provide: getRepositoryToken(Category),
+          useValue: anotherMockCategoryRepository,
+        },
+      ],
+    }).compile();
+
+    anotherService = module.get<CategoryService>(CategoryService);
+
+    try {
+      await anotherService.delete(5);
+    } catch (error) {
+      expect(error.response).toEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    }
   });
 });

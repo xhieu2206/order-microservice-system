@@ -7,6 +7,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 
 describe('OrderService', () => {
   let service: OrderService;
+  let anotherService: OrderService;
+
   const mockOrderRepository = {
     find: jest.fn().mockImplementation(() =>
       Promise.resolve([
@@ -96,6 +98,23 @@ describe('OrderService', () => {
         ...order,
       }),
     ),
+
+    createQueryBuilder: jest.fn().mockImplementation(() => ({
+      update: jest.fn().mockImplementation(() => ({
+        set: jest.fn().mockImplementation(() => ({
+          where: jest.fn().mockImplementation(() => ({
+            execute: jest
+              .fn()
+              .mockImplementation(() => console.log('Executing ...')),
+          })),
+        })),
+      })),
+    })),
+  };
+  const anotherMockOrderRepository = {
+    findOne: jest
+      .fn()
+      .mockImplementation((id: number) => Promise.resolve(null)),
   };
 
   beforeEach(async () => {
@@ -180,6 +199,29 @@ describe('OrderService', () => {
     });
   });
 
+  it(`should not get the order that has ID equal 5 and return the NotFoundException instead`, async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        OrderService,
+        {
+          provide: getRepositoryToken(Order),
+          useValue: anotherMockOrderRepository,
+        },
+      ],
+    }).compile();
+
+    anotherService = module.get<OrderService>(OrderService);
+
+    try {
+      await anotherService.get(5);
+    } catch (err) {
+      expect(err.response).toEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    }
+  });
+
   it(`should create an order and return it`, async () => {
     expect(
       await service.create({
@@ -230,6 +272,22 @@ describe('OrderService', () => {
     });
   });
 
+  it(`should not allow to update order's status to ${OrderStatusEnum.CREATED}`, async () => {
+    try {
+      await service.update(1, {
+        productName: 'Product 1 Name',
+        quantity: 1,
+        deliveryAddress: 'Address 1',
+        customerName: 'Customer Name 1',
+        phone: '1234567891',
+        email: 'test_email_1@gmail.com',
+        status: OrderStatusEnum.CREATED,
+      });
+    } catch (err) {
+      expect(err.response).toEqual({ statusCode: 400, message: 'Bad Request' });
+    }
+  });
+
   it(`should update an order's status of order that has ID equal 2 from "CONFIRMED" to "CANCELLED"`, async () => {
     expect(
       await service.updateStatus(2, {
@@ -262,5 +320,10 @@ describe('OrderService', () => {
       createdAt: expect.any(Date),
       status: OrderStatusEnum.CREATED,
     });
+  });
+
+  it(`should update the order's status from "${OrderStatusEnum.CONFIRMED}" to "${OrderStatusEnum.DELIVERED}" successfully`, async () => {
+    await service.updateConfirmedOrderStatus();
+    expect(mockOrderRepository.createQueryBuilder).toHaveBeenCalled();
   });
 });

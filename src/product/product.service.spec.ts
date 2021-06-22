@@ -7,6 +7,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 
 describe('ProductService', () => {
   let service: ProductService;
+  let exceptionService: ProductService;
+
   const mockProductRepository = {
     findOne: jest.fn().mockImplementation((id: number) =>
       Promise.resolve({
@@ -46,6 +48,11 @@ describe('ProductService', () => {
       }),
     ),
   };
+  const exceptionMockProductRepository = {
+    findOne: jest
+      .fn()
+      .mockImplementation((id: number) => Promise.resolve(null)),
+  };
 
   const mockCategoryRepository = {
     findOne: jest.fn().mockImplementation((categoryId: number) =>
@@ -55,6 +62,12 @@ describe('ProductService', () => {
         brandImage: 'Test Category 1 Image',
       }),
     ),
+  };
+
+  const exceptionMockCategoryRepository = {
+    findOne: jest
+      .fn()
+      .mockImplementation((id: number) => Promise.resolve(null)),
   };
 
   beforeEach(async () => {
@@ -82,6 +95,33 @@ describe('ProductService', () => {
       image: 'Test Product 1 Image',
       description: 'Test Product 1 Description',
     });
+  });
+
+  it(`should not get the product with ID equal to 5 because the product with this ID doesn't existed and return NotFoundException instead`, async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ProductService,
+        {
+          provide: getRepositoryToken(Product),
+          useValue: exceptionMockProductRepository,
+        },
+        {
+          provide: getRepositoryToken(Category),
+          useValue: mockCategoryRepository,
+        },
+      ],
+    }).compile();
+
+    exceptionService = module.get<ProductService>(ProductService);
+
+    try {
+      await exceptionService.get(5);
+    } catch (error) {
+      expect(error.response).toEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    }
   });
 
   it(`should get all products and return them`, async () => {
@@ -125,5 +165,36 @@ describe('ProductService', () => {
         brandImage: 'Test Category 1 Image',
       },
     });
+  });
+
+  it(`should not allow to create a new product with category that doesn't existed and return NotFoundException instead (example category ID is 5)`, async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ProductService,
+        {
+          provide: getRepositoryToken(Product),
+          useValue: mockProductRepository,
+        },
+        {
+          provide: getRepositoryToken(Category),
+          useValue: exceptionMockCategoryRepository,
+        },
+      ],
+    }).compile();
+
+    exceptionService = module.get<ProductService>(ProductService);
+
+    try {
+      await exceptionService.create(5, {
+        name: 'Test Product 1',
+        image: 'Test Product 1 Image',
+        description: 'Test Product 1 Description',
+      });
+    } catch (error) {
+      expect(error.response).toEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    }
   });
 });
