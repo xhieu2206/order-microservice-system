@@ -73,7 +73,7 @@ export class OrderService {
     if (!removeOrder) {
       throw new NotFoundException();
     }
-    return removeOrder;
+    return this.orderRepository.remove(removeOrder);
   }
 
   async updateConfirmedOrderStatus() {

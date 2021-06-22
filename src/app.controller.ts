@@ -6,7 +6,6 @@ import {
   Request,
   Body,
 } from '@nestjs/common';
-import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -14,10 +13,7 @@ import { Authentication } from './users/entities/authentication';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
   @ApiTags('Authentication')
   @ApiResponse({
