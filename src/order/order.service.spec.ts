@@ -259,7 +259,7 @@ describe('OrderService', () => {
       customerName: 'Customer Name 1',
       phone: '1234567891',
       email: 'test_email_1@gmail.com',
-      createdAt: new Date(),
+      createdAt: expect.any(Date),
       status: OrderStatusEnum.CREATED,
     });
   });

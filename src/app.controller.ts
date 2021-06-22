@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  UseGuards,
-  Request,
-  Body,
-} from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Body } from '@nestjs/common';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -23,7 +16,7 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req, @Body() authentication: Authentication): any {
-    console.log(authentication);
+    console.log('authentication: ', authentication);
     return this.authService.login(req.user);
   }
 }
